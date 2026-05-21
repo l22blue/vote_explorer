@@ -229,95 +229,59 @@ def get_party_policy(party_name: str = "") -> list:
     data = nec_get("VolCandInfoInqireService2/getPartyPolicyInqire", params, service_key=NEC_PARTY_POLICY_KEY)
     
     if data.get("MOCK_FALLBACK"):
-        # Side-by-Side 양방향 비교에 딱 맞춘 세련된 정당별 정책 모의 데이터
+        # Side-by-Side 양방향 비교에 딱 맞춘 세련된 정당별 정책 모의 데이터 (단일 정당 딕셔너리 구조)
         mock_policies = [
             # 더불어민주당
             {
                 "partyName": "더불어민주당",
-                "prmsOrd": "1",
-                "prmsRealmName": "경제 및 복지",
-                "prmsTitle": "소상공인 100% 안심 생계 대출 지원 및 서민 물가 안정",
-                "prmsCont": "지역사랑상품권 국비 지원 의무화, 한계 소상공인 특례 부실 보증 기금 마련 및 세제 감면 확대"
-            },
-            {
-                "partyName": "더불어민주당",
-                "prmsOrd": "2",
-                "prmsRealmName": "주거 및 청년",
-                "prmsTitle": "청년 주거 안심 보장제 및 임대 보증금 지원 2배 확대",
-                "prmsCont": "공공 청년 주택 공급 10만호 확대, 전세 보증금 안심 반환 보증 지원비 최대 50만원 지원"
-            },
-            {
-                "partyName": "더불어민주당",
-                "prmsOrd": "3",
-                "prmsRealmName": "환경 및 기후",
-                "prmsTitle": "기후 위기 대응 신재생 에너지 혁신 패키지 구축",
-                "prmsCont": "친환경 태양광 주택 보급 전폭 확대, 공공 대중교통 이용 시 리워드 에코 마일리지 적립 2배 상향"
+                "prmsRealmName1": "경제 및 복지",
+                "prmsTitle1": "소상공인 100% 안심 생계 대출 지원 및 서민 물가 안정",
+                "prmsCont1": "지역사랑상품권 국비 지원 의무화, 한계 소상공인 특례 부실 보증 기금 마련 및 세제 감면 확대",
+                "prmsRealmName2": "주거 및 청년",
+                "prmsTitle2": "청년 주거 안심 보장제 및 임대 보증금 지원 2배 확대",
+                "prmsCont2": "공공 청년 주택 공급 10만호 확대, 전세 보증금 안심 반환 보증 지원비 최대 50만원 지원",
+                "prmsRealmName3": "환경 및 기후",
+                "prmsTitle3": "기후 위기 대응 신재생 에너지 혁신 패키지 구축",
+                "prmsCont3": "친환경 태양광 주택 보급 전폭 확대, 공공 대중교통 이용 시 리워드 에코 마일리지 적립 2배 상향"
             },
             # 국민의힘
             {
                 "partyName": "국민의힘",
-                "prmsOrd": "1",
-                "prmsRealmName": "경제 및 복지",
-                "prmsTitle": "규제 개혁을 통한 소상공인 고용 유연성 확보 및 세제 개편",
-                "prmsCont": "기업 승계 특별 감세 조례 및 신속 인허가 원스톱 서비스 개설, 벤처 육성 세액 공제 상향"
-            },
-            {
-                "partyName": "국민의힘",
-                "prmsOrd": "2",
-                "prmsRealmName": "주거 및 청년",
-                "prmsTitle": "도심 용적률 파격 상향 및 청년 내집 마련 청약 기회 혁신",
-                "prmsCont": "역세권 고밀도 개발을 통한 주택 공급 시장 다변화, 청년 맞춤형 장기 무이자 주택 주택자금대출 확대"
-            },
-            {
-                "partyName": "국민의힘",
-                "prmsOrd": "3",
-                "prmsRealmName": "환경 및 기후",
-                "prmsTitle": "차세대 첨단 원전 및 탄소 제로 첨단 기술 밸리 유치",
-                "prmsCont": "무공해 친환경 스마트 자율 주행 셔틀 노선 증설, 친환경 신기술 연구 R&D 세액 공제 신설"
+                "prmsRealmName1": "경제 및 복지",
+                "prmsTitle1": "규제 개혁을 통한 소상공인 고용 유연성 확보 및 세제 개편",
+                "prmsCont1": "기업 승계 특별 감세 조례 및 신속 인허가 원스톱 서비스 개설, 벤처 육성 세액 공제 상향",
+                "prmsRealmName2": "주거 및 청년",
+                "prmsTitle2": "도심 용적률 파격 상향 및 청년 내집 마련 청약 기회 혁신",
+                "prmsCont2": "역세권 고밀도 개발을 통한 주택 공급 시장 다변화, 청년 맞춤형 장기 무이자 주택 주택자금대출 확대",
+                "prmsRealmName3": "환경 및 기후",
+                "prmsTitle3": "차세대 첨단 원전 및 탄소 제로 첨단 기술 밸리 유치",
+                "prmsCont3": "무공해 친환경 스마트 자율 주행 셔틀 노선 증설, 친환경 신기술 연구 R&D 세액 공제 신설"
             },
             # 조국혁신당
             {
                 "partyName": "조국혁신당",
-                "prmsOrd": "1",
-                "prmsRealmName": "경제 및 복지",
-                "prmsTitle": "공정 경제를 위한 상생 협력 기금 법제화 및 분배 구조 개선",
-                "prmsCont": "대기업-중소기업 간 격차 완화를 위한 특별 법안 제정, 구내 소상공인 상생 협력 자금 출연 유도"
-            },
-            {
-                "partyName": "조국혁신당",
-                "prmsOrd": "2",
-                "prmsRealmName": "주거 및 청년",
-                "prmsTitle": "국공립 공공 임대 주택 임대 비율 하향 및 청년 주거 권리 확보",
-                "prmsCont": "구유지 내 공공 주택 비율 무조건 50% 이상 지정, 보증 사기 강력 구제 특별단 신설"
-            },
-            {
-                "partyName": "조국혁신당",
-                "prmsOrd": "3",
-                "prmsRealmName": "환경 및 기후",
-                "prmsTitle": "탄소중립 도시 가속화를 위한 넷제로 로드맵 완성",
-                "prmsCont": "탄소 중립 특별 조례 제정, 관내 모든 가로등 및 신호 인프라를 스마트 신재생 보조 시스템으로 전면 교체"
+                "prmsRealmName1": "경제 및 복지",
+                "prmsTitle1": "공정 경제를 위한 상생 협력 기금 법제화 및 분배 구조 개선",
+                "prmsCont1": "대기업-중소기업 간 격차 완화를 위한 특별 법안 제정, 구내 소상공인 상생 협력 자금 출연 유도",
+                "prmsRealmName2": "주거 및 청년",
+                "prmsTitle2": "국공립 공공 임대 주택 임대 비율 하향 및 청년 주거 권리 확보",
+                "prmsCont2": "구유지 내 공공 주택 비율 무조건 50% 이상 지정, 보증 사기 강력 구제 특별단 신설",
+                "prmsRealmName3": "환경 및 기후",
+                "prmsTitle3": "탄소중립 도시 가속화를 위한 넷제로 로드맵 완성",
+                "prmsCont3": "탄소 중립 특별 조례 제정, 관내 모든 가로등 및 신호 인프라를 스마트 신재생 보조 시스템으로 전면 교체"
             },
             # 개혁신당
             {
                 "partyName": "개혁신당",
-                "prmsOrd": "1",
-                "prmsRealmName": "경제 및 복지",
-                "prmsTitle": "첨단 IT 기술 융합 소상공인 무인화 및 스마트 숍 혁신 지원",
-                "prmsCont": "지능형 서빙 및 키오스크 스마트 도입 보조금 매칭 확대, 노동 규제 혁신 패키지 도입"
-            },
-            {
-                "partyName": "개혁신당",
-                "prmsOrd": "2",
-                "prmsRealmName": "주거 및 청년",
-                "prmsTitle": "청년 안심 셰어하우스 공급 규제 제로 선포 및 주거 자유 시장 활성화",
-                "prmsCont": "노후 오피스 및 상가의 스마트 청년 소형 복합공간 전용 특례 완화, 부동산 주거 계약 보장 대폭 보강"
-            },
-            {
-                "partyName": "개혁신당",
-                "prmsOrd": "3",
-                "prmsRealmName": "환경 및 기후",
-                "prmsTitle": "민간 주도 친환경 기후 기술 스타트업 펀드 대폭 확대 유치",
-                "prmsCont": "탄소 포집 등 기후 기술 보유 스타트업 전용 클러스터 구축, 기업 매칭 그린 본드 발행 지원"
+                "prmsRealmName1": "경제 및 복지",
+                "prmsTitle1": "첨단 IT 기술 융합 소상공인 무인화 및 스마트 숍 혁신 지원",
+                "prmsCont1": "지능형 서빙 및 키오스크 스마트 도입 보조금 매칭 확대, 노동 규제 혁신 패키지 도입",
+                "prmsRealmName2": "주거 및 청년",
+                "prmsTitle2": "청년 안심 셰어하우스 공급 규제 제로 선포 및 주거 자유 시장 활성화",
+                "prmsCont2": "노후 오피스 및 상가의 스마트 청년 소형 복합공간 전용 특례 완화, 부동산 주거 계약 보장 대폭 보강",
+                "prmsRealmName3": "환경 및 기후",
+                "prmsTitle3": "민간 주도 친환경 기후 기술 스타트업 펀드 대폭 확대 유치",
+                "prmsCont3": "탄소 포집 등 기후 기술 보유 스타트업 전용 클러스터 구축, 기업 매칭 그린 본드 발행 지원"
             }
         ]
         
