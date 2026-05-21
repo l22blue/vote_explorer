@@ -1,0 +1,21 @@
+# 🗳️ .gitignore
+
+# 1. API 키가 담긴 환경 변수 파일 (절대 업로드 금지)
+.env
+
+# 2. 파이썬 컴파일 및 임시 파일
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 3. Streamlit 및 시스템 임시 파일
+.streamlit/
+.idea/
+.vscode/
+*.log
