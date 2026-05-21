@@ -68,6 +68,50 @@ st.markdown("""
             color: white;
             margin-bottom: 0.75rem;
         }
+
+        /* 본문 텍스트 가시성 강제 확보 (배경 화이트 시 글자 흰색 방지) */
+        .element-container div[data-testid="stMarkdownContainer"] h1,
+        .element-container div[data-testid="stMarkdownContainer"] h2,
+        .element-container div[data-testid="stMarkdownContainer"] h3,
+        .element-container div[data-testid="stMarkdownContainer"] h4,
+        .element-container div[data-testid="stMarkdownContainer"] p,
+        .element-container div[data-testid="stMarkdownContainer"] li,
+        .stSelectbox label,
+        .stTextInput label {
+            color: #1e293b !important;
+        }
+
+        /* 🚀 Streamlit Page Link 프리미엄 버튼 스타일 오버라이드 (사이드바 가시성 확보) */
+        div[data-testid="stPageLink"] {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f766e 100%) !important;
+            border-radius: 14px !important;
+            padding: 0.75rem 1.25rem !important;
+            border: none !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+            transition: all 0.3s ease !important;
+            text-align: center !important;
+            justify-content: center !important;
+            display: flex !important;
+        }
+
+        div[data-testid="stPageLink"]:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 15px -3px rgba(15, 118, 110, 0.3) !important;
+            filter: brightness(1.1) !important;
+        }
+
+        /* 내부 텍스트 및 이모지 스타일 강제 적용 */
+        div[data-testid="stPageLink"] p,
+        div[data-testid="stPageLink"] span,
+        div[data-testid="stPageLink"] a {
+            color: #ffffff !important;
+            font-size: 1.05rem !important;
+            font-weight: 700 !important;
+            text-decoration: none !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -79,8 +123,29 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
+# ── 공통 섹션 타이틀 렌더링 헬퍼 함수 (그라데이션 배경) ────────────────────────
+def section_title(icon: str, title: str, start_color: str = "#1e293b", end_color: str = "#475569"):
+    st.markdown(f"""
+        <div style="
+            background: linear-gradient(135deg, {start_color} 0%, {end_color} 100%);
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.1rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        ">
+            <span style="color: white !important;">{icon}</span> <span style="color: white !important;">{title}</span>
+        </div>
+    """, unsafe_allow_html=True)
+
 # ── 검색 영역 ────────────────────────
-st.write("### 👤 후보자 이름 입력")
+section_title("👤", "후보자 이름 입력", "#1e3a8a", "#3b82f6")
 col1, col2 = st.columns([4, 1])
 
 with col1:
