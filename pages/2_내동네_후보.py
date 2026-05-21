@@ -112,19 +112,12 @@ election_types = {
 }
 
 # ── 상단 필터 셀렉션 ────────────────────────
-st.write("### 📍 지역구 및 선거종류 선택")
+st.write("### 📍 선거종류 및 지역구 선택")
 col_sel1, col_sel2 = st.columns(2)
 
 with col_sel1:
-    selected_district = st.selectbox(
-        "우리 동네(자치구)를 선택하세요.",
-        options=seoul_districts,
-        index=22  # 기본값 종로구
-    )
-
-with col_sel2:
     selected_election_label = st.selectbox(
-        "조회할 선거 종류를 선택하세요.",
+        "1. 조회할 선거 종류를 선택하세요.",
         options=list(election_types.keys()),
         index=1  # 기본값 구청장 선거
     )
@@ -133,6 +126,23 @@ with col_sel2:
 el_info = election_types[selected_election_label]
 sg_type_code = el_info["code"]
 is_district_election = el_info["needs_district"]
+
+with col_sel2:
+    if is_district_election:
+        selected_district = st.selectbox(
+            "2. 우리 동네(자치구)를 선택하세요.",
+            options=seoul_districts,
+            index=22  # 기본값 종로구
+        )
+    else:
+        # 서울특별시장 선거는 자치구 선택이 불필요하므로 비활성화 상태로 표시
+        selected_district = st.selectbox(
+            "2. 우리 동네(자치구)를 선택하세요.",
+            options=["서울특별시 전체 (선택 불필요)"],
+            index=0,
+            disabled=True,
+            help="서울특별시 시장 선거는 자치구 구분 없이 서울 전체를 대상으로 조회합니다."
+        )
 
 # 서울특별시장 선거일 경우 구 이름은 제외하고 조회
 wiw_name_query = selected_district if is_district_election else ""
