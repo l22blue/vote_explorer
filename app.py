@@ -53,7 +53,7 @@ st.markdown("""
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             text-align: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         .nav-icon {
@@ -85,6 +85,38 @@ st.markdown("""
             color: #475569;
             line-height: 1.6;
             min-height: 4.5rem;
+        }
+
+        /* 🚀 Streamlit Page Link 프리미엄 버튼 스타일 오버라이드 (가시성 100% 확보) */
+        div[data-testid="stPageLink"] {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f766e 100%) !important;
+            border-radius: 14px !important;
+            padding: 0.75rem 1.25rem !important;
+            border: none !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+            transition: all 0.3s ease !important;
+            text-align: center !important;
+            justify-content: center !important;
+            display: flex !important;
+        }
+
+        div[data-testid="stPageLink"]:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 15px -3px rgba(15, 118, 110, 0.3) !important;
+            filter: brightness(1.1) !important;
+        }
+
+        /* 내부 텍스트 및 이모지 스타일 강제 적용 */
+        div[data-testid="stPageLink"] p,
+        div[data-testid="stPageLink"] span,
+        div[data-testid="stPageLink"] a {
+            color: #ffffff !important;
+            font-size: 1.05rem !important;
+            font-weight: 700 !important;
+            text-decoration: none !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
         }
     </style>
 """, unsafe_allow_html=True)
