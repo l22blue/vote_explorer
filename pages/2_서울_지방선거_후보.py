@@ -389,7 +389,8 @@ else:
                         {name1} <span style="font-weight: 400; font-size: 1rem; color: #64748b;">({wiw1})</span>
                     </h3>
                     <div style="font-size: 0.9rem; color: #475569; line-height: 1.6; margin-bottom: 1rem;">
-                        👤 <b>나이:</b> {age1}세 &nbsp;|&nbsp; 🎓 <b>학력:</b> {edu1}<br>
+                        👤 <b>나이:</b> {age1}세<br>
+                        🎓 <b>학력:</b> {edu1}<br>
                         💼 <b>직업:</b> {job1}
                     </div>
                 </div>
@@ -480,7 +481,8 @@ else:
                             {name2} <span style="font-weight: 400; font-size: 1rem; color: #64748b;">({wiw2})</span>
                         </h3>
                         <div style="font-size: 0.9rem; color: #475569; line-height: 1.6; margin-bottom: 1rem;">
-                            👤 <b>나이:</b> {age2}세 &nbsp;|&nbsp; 🎓 <b>학력:</b> {edu2}<br>
+                            👤 <b>나이:</b> {age2}세<br>
+                            🎓 <b>학력:</b> {edu2}<br>
                             💼 <b>직업:</b> {job2}
                         </div>
                     </div>
