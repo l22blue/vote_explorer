@@ -56,8 +56,8 @@ def nec_get(endpoint: str, params: dict, service_key: str) -> dict:
 # ── 후보자 통합검색 ───────────────────────────────
 def search_candidate(name: str) -> list:
     data = nec_get(
-        "VolCandInfoInqireService2/getCandidateInfoInqire",
-        {"sgId": SG_ID, "candName": name, "numOfRows": 20},
+        "CndaSrchService/getCndaSrchInqire",
+        {"name": name, "numOfRows": 20},
         service_key=NEC_CAND_SEARCH_KEY
     )
     
@@ -109,9 +109,9 @@ def get_candidates_by_district(sg_type_code: str, sd_name: str = "서울특별�
         "numOfRows": 100
     }
     if wiw_name:
-        params["wiwName"] = wiw_name
+        params["sggName"] = wiw_name
         
-    data = nec_get("VolCandInfoInqireService2/getCandInfoInqire", params, service_key=NEC_CAND_INFO_KEY)
+    data = nec_get("PofelcddInfoInqireService/getPoelpcddRegistSttusInfoInqire", params, service_key=NEC_CAND_INFO_KEY)
     
     if data.get("MOCK_FALLBACK"):
         # 지역 맞춤형 모의 후보 정보
@@ -181,8 +181,8 @@ def get_candidates_by_district(sg_type_code: str, sd_name: str = "서울특별�
 # ── 선거공약 조회 ─────────────────────────────────
 def get_pledges(cand_id: str, sg_type_code: str) -> list:
     data = nec_get(
-        "VolCandInfoInqireService2/getPledgeInqire",
-        {"sgId": SG_ID, "sgTypecode": sg_type_code, "candId": cand_id, "numOfRows": 50},
+        "ElecPrmsInfoInqireService/getCnddtElecPrmsInfoInqire",
+        {"sgId": SG_ID, "sgTypecode": sg_type_code, "cnddtId": cand_id, "numOfRows": 50},
         service_key=NEC_PLEDGE_KEY
     )
     
@@ -226,7 +226,7 @@ def get_party_policy(party_name: str = "") -> list:
     if party_name:
         params["partyName"] = party_name
         
-    data = nec_get("VolCandInfoInqireService2/getPartyPolicyInqire", params, service_key=NEC_PARTY_POLICY_KEY)
+    data = nec_get("PartyPlcInfoInqireService/getPartyPlcInfoInqire", params, service_key=NEC_PARTY_POLICY_KEY)
     
     if data.get("MOCK_FALLBACK"):
         # Side-by-Side 양방향 비교에 딱 맞춘 세련된 정당별 정책 모의 데이터 (단일 정당 딕셔너리 구조)
