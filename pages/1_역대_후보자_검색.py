@@ -115,15 +115,7 @@ st.markdown("""
 
         /* 📝 일반 버튼 premium styling 및 글자색 강제 흰색 지정 */
         button, 
-        button *,
-        .stButton button,
-        .stButton button *,
-        div[data-testid="stButton"] button, 
-        div[data-testid="stButton"] button * {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-        }
-
+        .stButton button, 
         div[data-testid="stButton"] button {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
             border: none !important;
@@ -137,10 +129,28 @@ st.markdown("""
             gap: 8px !important;
         }
 
+        button:hover, 
+        .stButton button:hover, 
         div[data-testid="stButton"] button:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4) !important;
             filter: brightness(1.1) !important;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%) !important;
+        }
+
+        /* 버튼 내부의 모든 텍스트/p/span 요소를 흰색으로 강제 지정 (높은 specificity) */
+        .element-container div[data-testid="stMarkdownContainer"] button p,
+        .element-container div[data-testid="stMarkdownContainer"] button span,
+        .stButton button p,
+        .stButton button span,
+        .stButton button div[data-testid="stMarkdownContainer"] p,
+        div[data-testid="stButton"] button p,
+        div[data-testid="stButton"] button div[data-testid="stMarkdownContainer"] p,
+        button *,
+        button p,
+        button span {
+            color: #ffffff !important;
+            font-weight: 700 !important;
         }
     </style>
 """, unsafe_allow_html=True)
