@@ -114,13 +114,21 @@ st.markdown("""
         }
 
         /* 📝 일반 버튼 premium styling 및 글자색 강제 흰색 지정 */
+        button, 
+        button *,
+        .stButton button,
+        .stButton button *,
+        div[data-testid="stButton"] button, 
+        div[data-testid="stButton"] button * {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+
         div[data-testid="stButton"] button {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
-            color: #ffffff !important;
             border: none !important;
             border-radius: 12px !important;
             padding: 0.6rem 1.2rem !important;
-            font-weight: 600 !important;
             transition: all 0.3s ease !important;
             box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2) !important;
             display: inline-flex !important;
@@ -133,11 +141,6 @@ st.markdown("""
             transform: translateY(-2px) !important;
             box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4) !important;
             filter: brightness(1.1) !important;
-        }
-
-        div[data-testid="stButton"] button p {
-            color: #ffffff !important;
-            font-weight: 700 !important;
         }
     </style>
 """, unsafe_allow_html=True)
