@@ -117,12 +117,15 @@ st.markdown("""
         button, 
         .stButton button, 
         div[data-testid="stButton"] button {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
-            border: none !important;
+            background: #1e293b !important;
+            background-color: #1e293b !important;
+            background-image: none !important;
+            color: #ffffff !important;
+            border: 1px solid #334155 !important;
             border-radius: 12px !important;
             padding: 0.6rem 1.2rem !important;
             transition: all 0.3s ease !important;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -133,9 +136,10 @@ st.markdown("""
         .stButton button:hover, 
         div[data-testid="stButton"] button:hover {
             transform: translateY(-2px) !important;
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4) !important;
-            filter: brightness(1.1) !important;
-            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%) !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4) !important;
+            background: #0f172a !important;
+            background-color: #0f172a !important;
+            color: #ffffff !important;
         }
 
         /* 버튼 내부의 모든 텍스트/p/span 요소를 흰색으로 강제 지정 (높은 specificity) */
@@ -303,22 +307,22 @@ st.markdown("""
         button, 
         .stButton button, 
         div[data-testid="stButton"] button {
-            background: #1e3a8a !important;
-            background-color: #1e3a8a !important;
+            background: #1e293b !important;
+            background-color: #1e293b !important;
             background-image: none !important;
             color: #ffffff !important;
-            border: none !important;
+            border: 1px solid #334155 !important;
             border-radius: 12px !important;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
         }
         button:hover, 
         .stButton button:hover, 
         div[data-testid="stButton"] button:hover {
-            background: #3b82f6 !important;
-            background-color: #3b82f6 !important;
+            background: #0f172a !important;
+            background-color: #0f172a !important;
             color: #ffffff !important;
             transform: translateY(-2px) !important;
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4) !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4) !important;
         }
         button *, 
         .stButton button *, 

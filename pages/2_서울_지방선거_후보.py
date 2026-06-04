@@ -131,6 +131,7 @@ st.markdown("""
         }
 
         /* 📝 일반 버튼 premium styling 및 글자색 강제 흰색 지정 */
+        /* 📝 일반 버튼 premium styling 및 글자색 강제 흰색 지정 */
         button, 
         button:hover, 
         button:active, 
@@ -143,15 +144,15 @@ st.markdown("""
         div[data-testid="stButton"] button:hover,
         div[data-testid="stButton"] button:active,
         div[data-testid="stButton"] button:focus {
-            background: #0f766e !important;
-            background-color: #0f766e !important;
+            background: #1e293b !important;
+            background-color: #1e293b !important;
             background-image: none !important;
             color: #ffffff !important;
-            border: none !important;
+            border: 1px solid #334155 !important;
             border-radius: 12px !important;
             padding: 0.6rem 1.2rem !important;
             transition: all 0.3s ease !important;
-            box-shadow: 0 4px 6px -1px rgba(20, 184, 166, 0.2) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -550,22 +551,22 @@ st.markdown("""
         button, 
         .stButton button, 
         div[data-testid="stButton"] button {
-            background: #0f766e !important;
-            background-color: #0f766e !important;
+            background: #1e293b !important;
+            background-color: #1e293b !important;
             background-image: none !important;
             color: #ffffff !important;
-            border: none !important;
+            border: 1px solid #334155 !important;
             border-radius: 12px !important;
-            box-shadow: 0 4px 6px -1px rgba(20, 184, 166, 0.2) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
         }
         button:hover, 
         .stButton button:hover, 
         div[data-testid="stButton"] button:hover {
-            background: #14b8a6 !important;
-            background-color: #14b8a6 !important;
+            background: #0f172a !important;
+            background-color: #0f172a !important;
             color: #ffffff !important;
             transform: translateY(-2px) !important;
-            box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.4) !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4) !important;
         }
         button *, 
         .stButton button *, 
