@@ -296,3 +296,38 @@ if search_name or search_btn:
                         st.markdown(f"**🏆 경력 2**: {career2}")
                 
                 st.write("")  # 간격 띄우기
+
+# ── 버튼 스타일 최종 override 강제 주입 (DOM 최하단에서 오버라이딩 확보) ────────────────
+st.markdown("""
+    <style>
+        button, 
+        .stButton button, 
+        div[data-testid="stButton"] button {
+            background: #1e3a8a !important;
+            background-color: #1e3a8a !important;
+            background-image: none !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2) !important;
+        }
+        button:hover, 
+        .stButton button:hover, 
+        div[data-testid="stButton"] button:hover {
+            background: #3b82f6 !important;
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4) !important;
+        }
+        button *, 
+        .stButton button *, 
+        div[data-testid="stButton"] button *,
+        .element-container div[data-testid="stMarkdownContainer"] button p,
+        .element-container div[data-testid="stMarkdownContainer"] button span {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+

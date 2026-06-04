@@ -132,9 +132,21 @@ st.markdown("""
 
         /* 📝 일반 버튼 premium styling 및 글자색 강제 흰색 지정 */
         button, 
-        .stButton button, 
-        div[data-testid="stButton"] button {
-            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%) !important;
+        button:hover, 
+        button:active, 
+        button:focus,
+        .stButton > button,
+        .stButton > button:hover,
+        .stButton > button:active,
+        .stButton > button:focus,
+        div[data-testid="stButton"] button,
+        div[data-testid="stButton"] button:hover,
+        div[data-testid="stButton"] button:active,
+        div[data-testid="stButton"] button:focus {
+            background: #0f766e !important;
+            background-color: #0f766e !important;
+            background-image: none !important;
+            color: #ffffff !important;
             border: none !important;
             border-radius: 12px !important;
             padding: 0.6rem 1.2rem !important;
@@ -146,16 +158,15 @@ st.markdown("""
             gap: 8px !important;
         }
 
-        button:hover, 
-        .stButton button:hover, 
-        div[data-testid="stButton"] button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.4) !important;
-            filter: brightness(1.1) !important;
-            background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%) !important;
-        }
-
         /* 버튼 내부의 모든 텍스트/p/span 요소를 흰색으로 강제 지정 (높은 specificity) */
+        button *, 
+        button *:hover, 
+        button *:active, 
+        button *:focus,
+        .stButton > button *,
+        .stButton > button *:hover,
+        .stButton > button *:active,
+        .stButton > button *:focus,
         .element-container div[data-testid="stMarkdownContainer"] button p,
         .element-container div[data-testid="stMarkdownContainer"] button span,
         .stButton button p,
@@ -163,7 +174,6 @@ st.markdown("""
         .stButton button div[data-testid="stMarkdownContainer"] p,
         div[data-testid="stButton"] button p,
         div[data-testid="stButton"] button div[data-testid="stMarkdownContainer"] p,
-        button *,
         button p,
         button span {
             color: #ffffff !important;
@@ -533,3 +543,38 @@ else:
                                     </div>
                                 """, unsafe_allow_html=True)
         st.write("---")
+
+# ── 버튼 스타일 최종 override 강제 주입 (DOM 최하단에서 오버라이딩 확보) ────────────────
+st.markdown("""
+    <style>
+        button, 
+        .stButton button, 
+        div[data-testid="stButton"] button {
+            background: #0f766e !important;
+            background-color: #0f766e !important;
+            background-image: none !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 6px -1px rgba(20, 184, 166, 0.2) !important;
+        }
+        button:hover, 
+        .stButton button:hover, 
+        div[data-testid="stButton"] button:hover {
+            background: #14b8a6 !important;
+            background-color: #14b8a6 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.4) !important;
+        }
+        button *, 
+        .stButton button *, 
+        div[data-testid="stButton"] button *,
+        .element-container div[data-testid="stMarkdownContainer"] button p,
+        .element-container div[data-testid="stMarkdownContainer"] button span {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
