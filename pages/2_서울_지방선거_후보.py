@@ -140,13 +140,38 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# ── 서울시 자치구 목록 정의 (데이터가 마련된 종로구로 한정) ────────────────────────
-seoul_districts = ["종로구"]
+# ── 서울시 25개 자치구 목록 정의 ────────────────────────
+# ── 서울시 선거구 및 관할 구역 매핑 데이터 로드 ────────────────────────
+import json
+import os
 
-# ── 선거종류 매핑 정의 (수집 완료된 시장 및 구청장 선거로 한정) ────────────────────────
+@st.cache_data
+def get_seoul_districts_map():
+    try:
+        # parent directory is workspace, then utils/seoul_districts_2026.json
+        path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "utils", "seoul_districts_2026.json")
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception as e:
+        st.error(f"선거구 맵 로딩 중 오류 발생: {e}")
+    return {}
+
+seoul_districts_map = get_seoul_districts_map()
+
+# ── 서울시 25개 자치구 목록 정의 ────────────────────────
+seoul_districts = list(seoul_districts_map.keys()) if seoul_districts_map else [
+    "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", 
+    "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", 
+    "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"
+]
+
+# ── 선거종류 매핑 정의 ────────────────────────
 election_types = {
-    "🏛️ 서울특별시장 선거": {"code": "3", "needs_district": False},
-    "🏘️ 자치구의 구청장 선거": {"code": "4", "needs_district": True}
+    "🏛️ 서울특별시장 선거": {"code": "3", "level": "city"},
+    "🏘️ 자치구의 구청장 선거": {"code": "4", "level": "gu"},
+    "🏢 서울특별시의회의원 선거 (시의원)": {"code": "5", "level": "sido_district"},
+    "👥 자치구의회의원 선거 (구의원)": {"code": "6", "level": "gugun_district"}
 }
 
 # ── 공통 섹션 타이틀 렌더링 헬퍼 함수 (그라데이션 배경) ────────────────────────
@@ -172,39 +197,76 @@ def section_title(icon: str, title: str, start_color: str = "#1e293b", end_color
 
 # ── 상단 필터 셀렉션 ────────────────────────
 section_title("📍", "선거종류 및 지역구 선택", "#0f766e", "#14b8a6")
-col_sel1, col_sel2 = st.columns(2)
 
-with col_sel1:
-    selected_election_label = st.selectbox(
-        "1. 조회할 선거 종류를 선택하세요.",
-        options=list(election_types.keys()),
-        index=1  # 기본값 구청장 선거
-    )
+selected_election_label = st.selectbox(
+    "1. 조회할 선거 종류를 선택하세요.",
+    options=list(election_types.keys()),
+    index=1  # 기본값 구청장 선거
+)
 
 # 선택된 설정값 파싱
 el_info = election_types[selected_election_label]
 sg_type_code = el_info["code"]
-is_district_election = el_info["needs_district"]
+level = el_info["level"]
 
-with col_sel2:
-    if is_district_election:
+col_sel1, col_sel2 = st.columns(2)
+
+selected_district = "서울특별시"
+selected_dong = ""
+wiw_name_query = ""
+
+if level == "city":
+    with col_sel1:
+        st.selectbox("2. 자치구 선택", options=["서울 전체 (선택 필요 없음)"], disabled=True)
+    with col_sel2:
+        st.selectbox("3. 행정동 선택", options=["서울 전체 (선택 필요 없음)"], disabled=True)
+elif level == "gu":
+    with col_sel1:
         selected_district = st.selectbox(
-            "2. 우리 동네(자치구)를 선택하세요.",
+            "2. 자치구(구청장 선거구)를 선택하세요.",
             options=seoul_districts,
-            index=0  # 기본값 종로구 (0번째 인덱스)
+            index=seoul_districts.index("종로구") if "종로구" in seoul_districts else 0
         )
-    else:
-        # 서울특별시장 선거는 자치구 선택이 불필요하므로 비활성화 상태로 표시
+    with col_sel2:
+        st.selectbox("3. 행정동 선택", options=["구 전체 (선택 필요 없음)"], disabled=True)
+    wiw_name_query = selected_district
+else:
+    # 시의원, 구의원 선거 (동 선택 필요)
+    with col_sel1:
         selected_district = st.selectbox(
-            "2. 우리 동네(자치구)를 선택하세요.",
-            options=["서울특별시 전체 (선택 불필요)"],
-            index=0,
-            disabled=True,
-            help="서울특별시 시장 선거는 자치구 구분 없이 서울 전체를 대상으로 조회합니다."
+            "2. 자치구를 선택하세요.",
+            options=seoul_districts,
+            index=seoul_districts.index("종로구") if "종로구" in seoul_districts else 0
         )
-
-# 서울특별시장 선거일 경우 구 이름은 제외하고 조회
-wiw_name_query = selected_district if is_district_election else ""
+    
+    # 해당 구의 모든 동 목록 구하기
+    gu_data = seoul_districts_map.get(selected_district, [])
+    all_dongs = []
+    for item in gu_data:
+        all_dongs.extend(item.get("dongs", []))
+    all_dongs = sorted(list(set(all_dongs)))
+    
+    with col_sel2:
+        selected_dong = st.selectbox(
+            "3. 살고 계신 행정동을 선택하세요.",
+            options=all_dongs
+        )
+        
+    # 선택된 동에 해당하는 선거구 찾기
+    resolved_district_name = ""
+    for item in gu_data:
+        if selected_dong in item.get("dongs", []):
+            if level == "sido_district":
+                resolved_district_name = item.get("sido_district", "")
+            else:
+                resolved_district_name = item.get("gugun_district", "")
+            break
+            
+    if resolved_district_name:
+        wiw_name_query = f"{selected_district}{resolved_district_name}"
+        st.info(f"✨ 선택하신 **{selected_district} {selected_dong}**은(는) **{resolved_district_name}** 관할구역입니다. (선거구명: `{wiw_name_query}`)")
+    else:
+        st.error("선거구 매핑을 찾을 수 없습니다. 데이터를 확인해 주세요.")
 
 # ── 데이터 로딩 ────────────────────────
 with st.spinner("해당 지역구의 후보자 명단을 가져오는 중입니다..."):
