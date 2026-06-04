@@ -1,6 +1,18 @@
 import streamlit as st
 from utils.api import get_candidates_by_district, get_pledges, solar_summarize
 
+# 세션 상태 초기화
+if "selected_cand_summary_id" not in st.session_state:
+    st.session_state.selected_cand_summary_id = None
+if "selected_cand_summary_name" not in st.session_state:
+    st.session_state.selected_cand_summary_name = None
+if "selected_cand_summary_party" not in st.session_state:
+    st.session_state.selected_cand_summary_party = None
+if "selected_cand_summary_wiw" not in st.session_state:
+    st.session_state.selected_cand_summary_wiw = None
+if "selected_cand_summary_sg_type" not in st.session_state:
+    st.session_state.selected_cand_summary_sg_type = None
+
 st.set_page_config(
     page_title="제9회 서울 지방선거 후보 - 서울 지방선거 & 역대 후보 탐색기",
     page_icon="🏘️",
@@ -380,7 +392,7 @@ else:
             p_color1 = get_party_color(party1)
             t_color1 = "#ffffff" if p_color1 != "#FFED00" else "#000000"
             
-            st.markdown(f"""
+            st.markdown(f'''
                 <div class="grid-card">
                     <span class="party-tag" style="background-color: {p_color1}; color: {t_color1};">
                         {f"기호 {giho1}번 | " if giho1 else ""}{party1}
@@ -394,67 +406,16 @@ else:
                         💼 <b>직업:</b> {job1}
                     </div>
                 </div>
-            """, unsafe_allow_html=True)
+            ''', unsafe_allow_html=True)
             
-            # AI 요약 버튼
+            # AI 요약 버튼 (세션 상태 업데이트 후 Rerun)
             if st.button(f"📝 {name1} 후보 공약 AI 요약", key=f"btn_sum_{huboid1}_{index}"):
-                with st.spinner(f"Solar AI가 {name1} 후보의 공약을 분석하여 요약 보고서를 작성하는 중..."):
-                    # 공약 목록 조회
-                    pledge_list = get_pledges(huboid1, sg_type_code)
-                    
-                    if not pledge_list:
-                        st.warning(f"⚠️ {name1} 후보의 등록된 상세 선거 공약 데이터가 현재 선관위 DB에 없습니다.")
-                    else:
-                        # 공약 텍스트 조립
-                        pledge_text = ""
-                        for idx, pledge in enumerate(pledge_list, 1):
-                            # 여러 포맷의 공약 필드 추출 시도
-                            for k in range(1, 11):
-                                title = get_val(pledge, [f"pldgTitle{k}"], default="")
-                                content = get_val(pledge, [f"pldgArgr{k}"], default="")
-                                if title and title != "정보 없음":
-                                    pledge_text += f"\n[공약 {k}] {title}\n"
-                                    if content and content != "정보 없음":
-                                        pledge_text += f"내용: {content}\n"
-                        
-                        if not pledge_text.strip():
-                            # 통째로 대표 공약 필드가 있는 경우 처리 (예: pldgTitle, pldgArgr)
-                            for pledge in pledge_list:
-                                title = get_val(pledge, ["pldgTitle"], default="")
-                                content = get_val(pledge, ["pldgArgr"], default="")
-                                if title and title != "정보 없음":
-                                    pledge_text += f"\n[공약] {title}\n내용: {content}\n"
-                        
-                        if not pledge_text.strip():
-                            st.warning(f"⚠️ {name1} 후보의 공약 텍스트를 구성하지 못했습니다. 상세 공약 문서가 준비되지 않았을 수 있습니다.")
-                        else:
-                            # Solar Prompt 요청
-                            prompt = f"""
-                            아래는 2026 서울 지방선거 후보자의 공식 공약 정보입니다.
-                            이 공약을 분석하여 유권자가 30초 만에 쉽게 파악할 수 있도록 친절하고 핵심적인 요약 보고서를 작성해 주세요.
-                            
-                            [요약 규칙]
-                            1. 전체 공약을 아우르는 **3대 핵심 공약 요약**을 굵은 글씨와 글머리 기호(bullet points)를 사용하여 명확하게 요약해 주세요.
-                            2. 각 핵심 공약별로 **구체적인 실행 계획 및 기대효과**를 1-2문장으로 쉽게 설명해 주세요.
-                            3. 친절하고 가독성이 뛰어난 한국어 어조를 사용하고, 불필요한 서론은 생략하고 바로 요약 결과를 보여주세요.
-                            
-                            후보자: {name1} ({party1})
-                            선거구: {wiw1}
-                            
-                            공약 정보:
-                            {pledge_text}
-                            """
-                            summary_res = solar_summarize(prompt)
-                            
-                            # 요약 결과 출력
-                            st.markdown(f"""
-                                <div class="summary-box">
-                                    <div class="summary-title">✨ Upstage Solar AI 분석 보고서</div>
-                                    <div style="font-size: 0.95rem; color: #1f2937; line-height: 1.7; white-space: pre-line;">
-                                        {summary_res}
-                                    </div>
-                                </div>
-                            """, unsafe_allow_html=True)
+                st.session_state.selected_cand_summary_id = huboid1
+                st.session_state.selected_cand_summary_name = name1
+                st.session_state.selected_cand_summary_party = party1
+                st.session_state.selected_cand_summary_wiw = wiw1
+                st.session_state.selected_cand_summary_sg_type = sg_type_code
+                st.rerun()
 
         # 2번째 후보 카드 출력 (오른쪽 - 인덱스가 유효한 경우)
         if index + 1 < len(candidates):
@@ -472,7 +433,7 @@ else:
                 p_color2 = get_party_color(party2)
                 t_color2 = "#ffffff" if p_color2 != "#FFED00" else "#000000"
                 
-                st.markdown(f"""
+                st.markdown(f'''
                     <div class="grid-card">
                         <span class="party-tag" style="background-color: {p_color2}; color: {t_color2};">
                             {f"기호 {giho2}번 | " if giho2 else ""}{party2}
@@ -486,69 +447,86 @@ else:
                             💼 <b>직업:</b> {job2}
                         </div>
                     </div>
-                """, unsafe_allow_html=True)
+                ''', unsafe_allow_html=True)
                 
-                # AI 요약 버튼
+                # AI 요약 버튼 (세션 상태 업데이트 후 Rerun)
                 if st.button(f"📝 {name2} 후보 공약 AI 요약", key=f"btn_sum_{huboid2}_{index+1}"):
-                    with st.spinner(f"Solar AI가 {name2} 후보의 공약을 분석하여 요약 보고서를 작성하는 중..."):
-                        # 공약 목록 조회
-                        pledge_list2 = get_pledges(huboid2, sg_type_code)
+                    st.session_state.selected_cand_summary_id = huboid2
+                    st.session_state.selected_cand_summary_name = name2
+                    st.session_state.selected_cand_summary_party = party2
+                    st.session_state.selected_cand_summary_wiw = wiw2
+                    st.session_state.selected_cand_summary_sg_type = sg_type_code
+                    st.rerun()
+
+    # ── 풀-위드(Full-Width) AI 요약 결과 출력 (루프 바깥) ─────────────────
+    active_id = st.session_state.selected_cand_summary_id
+    candidate_ids = [get_val(cand, ["huboid", "candId"]) for cand in candidates]
+    
+    if active_id and active_id in candidate_ids:
+        active_cand = next((cand for cand in candidates if get_val(cand, ["huboid", "candId"]) == active_id), None)
+        if active_cand:
+            active_name = get_val(active_cand, ["name", "candName"])
+            active_party = get_val(active_cand, ["jdName", "partyName"])
+            active_wiw = get_val(active_cand, ["wiwName", "sggName"])
+            
+            st.write("---")
+            section_title("✨", f"{active_name} 후보 공약 AI 요약 보고서", "#0f766e", "#14b8a6")
+            
+            with st.spinner(f"Solar AI가 {active_name} 후보의 공약을 분석하여 요약 보고서를 작성하는 중..."):
+                pledge_list = get_pledges(active_id, sg_type_code)
+                
+                if not pledge_list:
+                    st.warning(f"⚠️ {active_name} 후보의 등록된 상세 선거 공약 데이터가 현재 선관위 DB에 없습니다.")
+                else:
+                    # 공약 텍스트 조립
+                    pledge_text = ""
+                    for idx, pledge in enumerate(pledge_list, 1):
+                        for k in range(1, 11):
+                            title = get_val(pledge, [f"pldgTitle{k}"], default="")
+                            content = get_val(pledge, [f"pldgArgr{k}"], default="")
+                            if title and title != "정보 없음":
+                                pledge_text += f"\n[공약 {k}] {title}\n"
+                                if content and content != "정보 없음":
+                                    pledge_text += f"내용: {content}\n"
+                                    
+                    if not pledge_text.strip():
+                        for pledge in pledge_list:
+                            title = get_val(pledge, ["pldgTitle"], default="")
+                            content = get_val(pledge, ["pldgArgr"], default="")
+                            if title and title != "정보 없음":
+                                pledge_text += f"\n[공약] {title}\n내용: {content}\n"
+                                
+                    if not pledge_text.strip():
+                        st.warning(f"⚠️ {active_name} 후보의 공약 텍스트를 구성하지 못했습니다.")
+                    else:
+                        prompt = f'''아래는 2026 서울 지방선거 후보자의 공식 공약 정보입니다.
+이 공약을 분석하여 유권자가 30초 만에 쉽게 파악할 수 있도록 친절하고 핵심적인 요약 보고서를 작성해 주세요.
+
+[요약 규칙]
+1. 전체 공약을 아우르는 **3대 핵심 공약 요약**을 굵은 글씨와 글머리 기호(bullet points)를 사용하여 명확하게 요약해 주세요.
+2. 각 핵심 공약별로 **구체적인 실행 계획 및 기대효과**를 1-2문장으로 쉽게 설명해 주세요.
+3. 친절하고 가독성이 뛰어난 한국어 어조를 사용하고, 불필요한 서론은 생략하고 바로 요약 결과를 보여주세요.
+
+후보자: {active_name} ({active_party})
+선거구: {active_wiw}
+
+공약 정보:
+{pledge_text}'''
+                        summary_res = solar_summarize(prompt)
                         
-                        if not pledge_list2:
-                            st.warning(f"⚠️ {name2} 후보의 등록된 상세 선거 공약 데이터가 현재 선관위 DB에 없습니다.")
-                        else:
-                            # 공약 텍스트 조립
-                            pledge_text2 = ""
-                            for idx, pledge in enumerate(pledge_list2, 1):
-                                for k in range(1, 11):
-                                    title = get_val(pledge, [f"pldgTitle{k}"], default="")
-                                    content = get_val(pledge, [f"pldgArgr{k}"], default="")
-                                    if title and title != "정보 없음":
-                                        pledge_text2 += f"\n[공약 {k}] {title}\n"
-                                        if content and content != "정보 없음":
-                                            pledge_text2 += f"내용: {content}\n"
-                            
-                            if not pledge_text2.strip():
-                                for pledge in pledge_list2:
-                                    title = get_val(pledge, ["pldgTitle"], default="")
-                                    content = get_val(pledge, ["pldgArgr"], default="")
-                                    if title and title != "정보 없음":
-                                        pledge_text2 += f"\n[공약] {title}\n내용: {content}\n"
-                            
-                            if not pledge_text2.strip():
-                                st.warning(f"⚠️ {name2} 후보의 공약 텍스트를 구성하지 못했습니다. 상세 공약 문서가 준비되지 않았을 수 있습니다.")
-                            else:
-                                # Solar Prompt 요청
-                                prompt2 = f"""
-                                아래는 2026 서울 지방선거 후보자의 공식 공약 정보입니다.
-                                이 공약을 분석하여 유권자가 30초 만에 쉽게 파악할 수 있도록 친절하고 핵심적인 요약 보고서를 작성해 주세요.
-                                
-                                [요약 규칙]
-                                1. 전체 공약을 아우르는 **3대 핵심 공약 요약**을 굵은 글씨와 글머리 기호(bullet points)를 사용하여 명확하게 요약해 주세요.
-                                2. 각 핵심 공약별로 **구체적인 실행 계획 및 기대효과**를 1-2문장으로 쉽게 설명해 주세요.
-                                3. 친절하고 가독성이 뛰어난 한국어 어조를 사용하고, 불필요한 서론은 생략하고 바로 요약 결과를 보여주세요.
-                                
-                                후보자: {name2} ({party2})
-                                선거구: {wiw2}
-                                
-                                공약 정보:
-                                {pledge_text2}
-                                """
-                                summary_res2 = solar_summarize(prompt2)
-                                
-                                # 요약 결과 출력
-                                st.markdown(f"""
-                                    <div class="summary-box">
-                                        <div class="summary-title">✨ Upstage Solar AI 분석 보고서</div>
-                                        <div style="font-size: 0.95rem; color: #1f2937; line-height: 1.7; white-space: pre-line;">
-                                            {summary_res2}
-                                        </div>
-                                    </div>
-                                """, unsafe_allow_html=True)
-        st.write("---")
+                        # 요약 결과 출력
+                        st.markdown(f'''
+                            <div class="summary-box">
+                                <div class="summary-title">✨ Upstage Solar AI 분석 보고서 ({active_name} 후보 - {active_party})</div>
+                                <div style="font-size: 0.95rem; color: #1f2937; line-height: 1.7; white-space: pre-line;">
+                                    {summary_res}
+                                </div>
+                            </div>
+                        ''', unsafe_allow_html=True)
+            st.write("---")
 
 # ── 버튼 스타일 최종 override 강제 주입 (DOM 최하단에서 오버라이딩 확보) ────────────────
-st.markdown("""
+st.markdown('''
     <style>
         button, 
         .stButton button, 
@@ -579,5 +557,4 @@ st.markdown("""
             font-weight: 700 !important;
         }
     </style>
-""", unsafe_allow_html=True)
-
+''', unsafe_allow_html=True)
