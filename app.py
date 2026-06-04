@@ -123,10 +123,10 @@ st.markdown("""
 
 st.markdown("""
     <div class="hero-section">
-        <div class="hero-title">🗳️ 내 동네 후보 탐색기</div>
+        <div class="hero-title">🗳️ 서울 지방선거 & 역대 후보 탐색기</div>
         <div class="hero-subtitle">
-            2026 서울 지방선거 후보자의 상세 프로필과 핵심 공약을 간편하게 탐색해 보세요.<br>
-            Upstage의 강력한 Solar AI를 활용하여, 복잡한 공약도 3줄 요약 보고서로 빠르게 파악할 수 있습니다.
+            어제 치러진 제9회 전국동시지방선거 서울 지역 후보들과 역대 선거 후보자들의 프로필 및 공약을 탐색해 보세요.<br>
+            Upstage의 강력한 Solar AI를 활용하여, 복잡한 공약도 핵심 요약 보고서로 빠르게 파악할 수 있습니다.
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -137,21 +137,21 @@ with col1:
     st.markdown("""
         <div class="nav-card">
             <div class="nav-icon">🔍</div>
-            <div class="nav-title">후보자 통합 검색</div>
-            <div class="nav-desc">이름 입력 한 번으로 서울시에 출마한 모든 후보자의 정당, 나이, 학력, 경력을 빠르고 쉽게 검색합니다.</div>
+            <div class="nav-title">역대 후보자 통합 검색</div>
+            <div class="nav-desc">이름 입력 한 번으로 역대 선거에 출마한 모든 후보자의 정당, 나이, 학력, 경력을 통합 조회합니다.</div>
         </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/1_후보자_검색.py", label="👉 후보자 검색하기", use_container_width=True)
+    st.page_link("pages/1_역대_후보자_검색.py", label="👉 역대 후보 검색하기", use_container_width=True)
 
 with col2:
     st.markdown("""
         <div class="nav-card">
             <div class="nav-icon">🏘️</div>
-            <div class="nav-title">내 동네 후보 & 공약</div>
-            <div class="nav-desc">내가 거주하는 자치구의 출마 후보자 명단을 확인하고, 복잡한 공약들을 AI 요약 분석을 통해 비교해 보세요.</div>
+            <div class="nav-title">제9회 서울 지방선거 후보 & 공약</div>
+            <div class="nav-desc">어제 실시된 제9회 전국동시지방선거 서울 지역 자치구별 출마 후보자 명단과 AI 공약 요약을 비교해 보세요.</div>
         </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/2_내동네_후보.py", label="👉 내 동네 후보 확인하기", use_container_width=True)
+    st.page_link("pages/2_서울_지방선거_후보.py", label="👉 서울 지방선거 후보 확인", use_container_width=True)
 
 with col3:
     st.markdown("""

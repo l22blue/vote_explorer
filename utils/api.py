@@ -1,6 +1,8 @@
 import requests
 from openai import OpenAI
 import streamlit as st
+import json
+import os
 from config import (
     NEC_CAND_SEARCH_KEY,
     NEC_CAND_INFO_KEY,
@@ -10,6 +12,26 @@ from config import (
     NEC_BASE_URL,
     SG_ID
 )
+
+def load_local_seoul_candidates() -> list:
+    try:
+        path = os.path.join(os.path.dirname(__file__), "seoul_candidates_2026.json")
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return []
+
+def load_local_seoul_pledges() -> dict:
+    try:
+        path = os.path.join(os.path.dirname(__file__), "seoul_pledges_2026.json")
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return {}
 
 # ── Solar 클라이언트 ──────────────────────────────
 client = OpenAI(
@@ -55,6 +77,14 @@ def nec_get(endpoint: str, params: dict, service_key: str) -> dict:
 
 # ── 후보자 통합검색 ───────────────────────────────
 def search_candidate(name: str) -> list:
+    # 2026 지방선거 관련 로컬 데이터 검색 우선
+    if SG_ID == "20260603":
+        local_data = load_local_seoul_candidates()
+        if local_data:
+            filtered = [item for item in local_data if name in item.get("name", "")]
+            if filtered:
+                return filtered
+
     data = nec_get(
         "CndaSrchService/getCndaSrchInqire",
         {"name": name, "numOfRows": 20},
@@ -102,6 +132,16 @@ def search_candidate(name: str) -> list:
 
 # ── 후보자 정보 (지역구별) ────────────────────────
 def get_candidates_by_district(sg_type_code: str, sd_name: str = "서울특별시", wiw_name: str = "") -> list:
+    # 만약 2026 서울시 지방선거(구청장, 시장) 조회인 경우 로컬 데이터 최우선 반환
+    if SG_ID == "20260603" and sd_name == "서울특별시":
+        local_data = load_local_seoul_candidates()
+        if local_data:
+            filtered = [item for item in local_data if item.get("sgTypecode") == sg_type_code]
+            if wiw_name:
+                filtered = [item for item in filtered if item.get("sggName") == wiw_name or item.get("wiwName") == wiw_name]
+            if filtered:
+                return filtered
+
     params = {
         "sgId": SG_ID,
         "sgTypecode": sg_type_code,
@@ -180,6 +220,19 @@ def get_candidates_by_district(sg_type_code: str, sd_name: str = "서울특별�
 
 # ── 선거공약 조회 ─────────────────────────────────
 def get_pledges(cand_id: str, sg_type_code: str) -> list:
+    # 로컬 2026 서울시 공약 조회
+    if SG_ID == "20260603":
+        local_pledges = load_local_seoul_pledges()
+        if cand_id in local_pledges:
+            pledges = local_pledges[cand_id]
+            formatted_pledges = []
+            for idx, pl in enumerate(pledges, 1):
+                formatted_pledges.append({
+                    f"pldgTitle{idx}": pl.get("pldgTitle", ""),
+                    f"pldgArgr{idx}": pl.get("pldgCont", "")
+                })
+            return formatted_pledges
+
     data = nec_get(
         "ElecPrmsInfoInqireService/getCnddtElecPrmsInfoInqire",
         {"sgId": SG_ID, "sgTypecode": sg_type_code, "cnddtId": cand_id, "numOfRows": 50},

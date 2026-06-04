@@ -2,7 +2,7 @@ import streamlit as st
 from utils.api import get_candidates_by_district, get_pledges, solar_summarize
 
 st.set_page_config(
-    page_title="서울 지역 후보 - 내 동네 후보 탐색기",
+    page_title="제9회 서울 지방선거 후보 - 서울 지방선거 & 역대 후보 탐색기",
     page_icon="🏘️",
     layout="wide"
 )
@@ -135,8 +135,8 @@ st.markdown("""
 # ── 헤더 렌더링 ────────────────────────
 st.markdown("""
     <div class="header-container">
-        <div class="header-title">🏘️ 서울 지역 후보자 & AI 공약 비교</div>
-        <div class="header-subtitle">서울특별시 시장 및 각 자치구별 출마 후보와 선거 공약을 AI 요약으로 한눈에 살펴보세요.</div>
+        <div class="header-title">🏘️ 제9회 서울 지방선거 후보 & AI 공약 비교</div>
+        <div class="header-subtitle">어제 치러진 제9회 전국동시지방선거 서울특별시장 및 각 자치구별 출마 후보와 선거 공약을 AI 요약으로 살펴보세요.</div>
     </div>
 """, unsafe_allow_html=True)
 

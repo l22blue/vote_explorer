@@ -2,7 +2,7 @@ import streamlit as st
 from utils.api import search_candidate
 
 st.set_page_config(
-    page_title="후보자 검색 - 내 동네 후보 탐색기",
+    page_title="역대 후보자 검색 - 서울 지방선거 & 역대 후보 탐색기",
     page_icon="🔍",
     layout="wide"
 )
@@ -118,8 +118,8 @@ st.markdown("""
 # ── 헤더 렌더링 ────────────────────────
 st.markdown("""
     <div class="header-container">
-        <div class="header-title">🔍 후보자 통합 검색</div>
-        <div class="header-subtitle">2026 서울 지방선거 후보자를 이름으로 빠르게 조회해 보세요.</div>
+        <div class="header-title">🔍 역대 후보자 통합 검색</div>
+        <div class="header-subtitle">역대 국회의원 및 지방선거 후보자를 이름으로 빠르게 조회해 보세요.</div>
     </div>
 """, unsafe_allow_html=True)
 
